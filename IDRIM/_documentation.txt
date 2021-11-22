@@ -115,6 +115,3 @@ Params_path note:
 
 Adding new models is as easy as cloning x1.py and then renaming it as x2.py
 Then just import the module as x2, then x2.Run(...)
-
-To do:
-	Add documentation for new y model stuff
