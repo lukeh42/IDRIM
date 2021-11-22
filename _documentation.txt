@@ -1,0 +1,120 @@
+!M! EXPERIMENTAL FILE NAME CONVENTION 
+INTENSITY.WAVELENGTH.PULSE.ANGLE.SAMPLE.txt
+
+constants.py
+	Contains all constants not included from scipy.constants.
+	Defines time_array, energy_array and temperature_array, which may need changing.
+	Defines DIM, time_points, temp_max and Intensity_max.
+	
+relations.py
+	Contains everything from Dispersion to Refractive Index. Extended Drude Model stuff.
+	Specifically:
+		Dispersion (TCO, Parabolic, generate array)
+		Density of States (TCO, Para, generate)
+		Fermi Dirac Distribution
+		Chemical Potential (Integrand, integrater, function to solve, mu solver)
+		Phonon Heat Capacity (integrand, integrater, generator)
+		Electron Heat Capacity (integrand, integrater, generator)
+		Effective Mass Definitions (Extended, Optical, Conventional, Weighted, generator [all in Secendo's et al paper formulism])
+		Average Effective Mass (Integrand, Integrater, Generator)
+		Plasma Frequency Generator
+		Permittivity Generator
+		Refractive Index Generator
+		
+graph.py
+	Contains all graphing functions, as well as the function that has the graph staple
+	All functions start with Graph or Graphing_
+	
+commons.py
+	All functions that are used throughout all models.
+	Contains:
+		Interpolation
+		Electron HC Interpolation (Special Case)
+		TMM_Run (Transfer Matrix Method)
+		GenInitialRTA (Generates initial optical coefficients)
+		gCoefficient (Electron-Phonon Coupling Constant)
+		FitParameterSolver (Solves for fit parameter)
+		ElectronRelax (Electron Relaxation Parameter)
+		PhononRelax (Phonon Relaxation)
+		AbsorbCoeff (Linear Absorbance Coefficient. NOT OPTICAL ABSORBANCE!)
+		POWER (Power Density function, source term for two temperature model)
+		IntensityArrayIndex (Used to convert intensity to index when accessing intensity array, intensity array needs +1 dim)
+		WavelengthToFrequency (Converts wavelength to frequency)
+		GenerateIntensityPoints (Generates number of intensity points in intensity array)
+		Normalizer (Normalizes a given array)
+		
+checks.py
+	Contains functions for sanity checking.
+	Funcs:
+		CheckART(R, T, A)
+		CheckFitParameter(pumpf, Fit, Ce300)
+		CheckRefractiveIndex(RI_array)
+
+models\
+	x: (legacy) #now defunct, y models is better #legacy to be axed at some point in future
+		x1 (Boyd)
+		x2 (Tom's Phonon Decay)
+		x3 (Simple Two Temp Model)
+		x4 (Simple Two Temp + Tom Phonon Decay)
+		x5 (Phonon Decay with Tp term)
+		x6 (Phonon decay with Te term)
+		x7 (Phonon decay with 1/Tp term
+		x8 (Non-Thermal Energy Density based phonon decay)
+		x9 (x8 and x7 in one model)
+		
+	y: #latest models, much better.
+		y0 (Boyd Model)
+		y2 (Simpler Electron Heat Capacity)
+		y3 (Constant Phonon Heat Capacity)
+		y5 (Different and broken power function, USELESS)
+		y7 (Alternate Phonon Relaxation constant and TTM DE definitons, has NO EFFECT. USELESS.)
+	
+
+genesis.py
+	Functions specific to setting initial file conditions, laser parameters as well as calculating arrays neeeded.
+	Contains:
+		SaveThicknessCase (Converts parameters from top of jupyter files to format that can be saved in txt file.)
+		LoadThicknessCase (Inverse of above. Not currently used)
+		SaveParameters (Saves parameters [Using SaveThicknessCase] to text file)
+		LoadOldParamsChecker (Loads parameters from txt file and compares with parameters defined at top of jupyter file)
+		Regeneration (Runs the Extended Drude Model and stores it as an array to be used in interpolation with TTM)
+		
+modcom.py
+	Functions that are used in the models, purely code related rather than commons.py being more physics related functions.
+	Contains:
+		TemporalMatrixAssignment (used to assign values to the intensity matrix if running TTM over multiple intensities)
+		CoreArrayUpdate (Assigns values to dictionary)
+		CoreCoefficientUpdate (Runs all the interpolation stuff in TTM from the Extended Drude Model)
+		GenerateCoreInitial (Generates initial arrays for TTM)
+		GenerateMatrixInitial (Generates matrices if running TTM over multiple intensities)
+
+file.py
+	Unused functions for loading and saving model output.
+	Contains:
+		ModelOutputSave (Saves model output to textfiles given path !M! WARNING! NO OVERWRITE CHECKS)
+		ModelOutputLoad (Loads model output from textfiles given path. !M! WARNING! NO CHECK IF FILE EXISTS)
+		ExperimentParamStringSplit (Converts experimental data txt file name to parameter list)
+		ExperimentParamPrinter (Checks and prints model parameters [top of jupyter file] and experimental parameters from StringSplit)
+		
+ymodcom.py
+	modcom but for y models
+	Contains:
+		yElectronHC (Simpler Electron HC Definition)
+		yCp (Constant Phonon HC)
+		yPower (Alternative broken power function)
+		yPhononRelax (Different phonon relaxation coefficient)
+		FermiDiracDifferential (Differential of Fermi dirac [wrt to temp])
+		EMPlasmaFrequencyIntegrand (Integrand for alternate Plasma Frequency definition)
+		EMPlasmaFrequencyIntegrate (Integrates above Integrand)
+		EMPlasmaFrequencyGenerator (Generates array for alternate plasma frequency definition)
+		ScatteringTemp (Temperature dependent Drude Scattering rate)
+		
+Params_path note:
+	This is put in constants because a) it's used twice, and b) it really shouldn't be touched.
+	Do not touch ParameterHistory.txt, if it is deleted, f:Regeneration() cannot run. If you delete it, there is a backup file provided. If you delete that, then just create a blank txt file with 6 zero's in it, each on a new line.
+
+Adding new models is as easy as cloning x1.py and then renaming it as x2.py
+Then just import the module as x2, then x2.Run(...)
+
+To do:
+	Add documentation for new y model stuff
