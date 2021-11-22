@@ -24,7 +24,7 @@ def yPhononRelax(Ce, gep): # Model Y-7
 	return Ce/gep
 
 def ScatteringTemp(Te, gaT0=15000):
-'''Temperature dependent drude scattering/damping coefficient. Default for T0 from EM paper [Time Domain ENZ]'''
+	'''Temperature dependent drude scattering/damping coefficient. Default for T0 from EM paper [Time Domain ENZ]'''
 	return gamma0*(1+Te/gaT0)
 
 '''
