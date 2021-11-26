@@ -88,7 +88,7 @@ def GenMu(Skip=0):
 def DebyeIntegrand(x, T):
 	'''Defines the integrand in the Debye model. You probably want f:DebyePhononHC.'''
 	return 3*9.0*N*k*((T/TD)**3)*((x**4 *np.exp(x))/((np.exp(x)-1)**2))
-	#don't know why the 3 is in there.
+	#3 is in there for 3N degrees of freedom for phonon modes.
 def DebyePhononHC(T):
 	'''Returns integral result of Debye Model for Phonon Heat Capacity.'''
 	return quad(DebyeIntegrand, 0, (TD/T), args=(T))[0]
