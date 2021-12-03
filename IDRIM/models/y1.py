@@ -37,7 +37,6 @@ def Core(I, Relations, Parameters, Y):
 	VarArray_dict = GenerateCoreInitial(Relations, Parameters)
 	for t in range(time_points):
 		
-		wp_300 = Interpolate(300, temperature_array, Relations['wp'])
 		wp_T = Interpolate(Te, temperature_array, Relations['wp'])#needed for Y13 so done here
 		
 		if Y['Y13'] == 1: #Model Y-13: Non-Constant Drude Scattering Rate
