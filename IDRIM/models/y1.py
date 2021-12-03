@@ -37,6 +37,7 @@ def Core(I, Relations, Parameters, Y):
 	VarArray_dict = GenerateCoreInitial(Relations, Parameters)
 	for t in range(time_points):
 		
+		wp_300 = Interpolate(300, temperature_array, Relations['wp'])
 		wp_T = Interpolate(Te, temperature_array, Relations['wp'])#needed for Y13 so done here
 		
 		if Y['Y13'] == 1: #Model Y-13: Non-Constant Drude Scattering Rate
@@ -45,13 +46,11 @@ def Core(I, Relations, Parameters, Y):
 		else:
 			n = Interpolate(Te, temperature_array, Relations['RI']) #Relations['RI'] will be constant gamma
 		
-		gep = gCoefficient(Tp)
+		gep = gCoefficient(Tp, Te, wp_T, WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'])
 		
 		R, T, A = TMM_Run(n, Parameters['wavelength'], Parameters['thick'], Parameters['angle'])
 		alpha = AbsorbCoeff(n, WavelengthToFrequency(Parameters['wavelength']))
 		tee = ElectronRelax(Te, wp_T, WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'])
-		
-		Relations.update({'Fit': FitParameterSolver(WavelengthToFrequency(Parameters['wavelength']), ElectronHC(300, Relations['Ce']), 300, wp_T)})
 		
 		if Y['Y2'] == 1: #Model Y-2: Simple Electron Heat Capacity
 			Ce = yElectronHC(Te)
@@ -83,7 +82,7 @@ def Core(I, Relations, Parameters, Y):
 		
 		#CheckFitParameter(WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'], ElectronHC(300, Relations['Ce']))#Checking for errors
 		CheckART(R, T, A) # checking for errors
-		
+		#print(Relations['Fit'])
 		Te = Te + DeltaTe(Ce, gep, tee, Num, Te, Tp, ycone)
 		if Y['Y11'] == 1:
 			Tp = Tp + DeltaTpAlt(Cp, gep, tep, Num, Te, Tp, yconp)
