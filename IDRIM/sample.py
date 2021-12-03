@@ -57,7 +57,10 @@ def loc_AvgEffMassIntegrand(E, mu_T, T, b):
 
 def loc_AvgEffMassIntegrate(mu_T, T, b):
 	return 1/(quad(loc_AvgEffMassIntegrand, 0, 100*e, args=(mu_T, T, b))[0])
-	
+
+def ENZFreqSolver(wp, epsilon_infinity, gamma):
+	return ((1/2*pi)*np.sqrt((wp**2)/(epsilon_infinity) - gamma**2))
+
 '''Solution and Graphing'''
 def Solver(wp0, Ef=1*e, ENZ=212e12):
 	'''Solves everything given plasma frequency at 300K. Supports custom Fermi energy and ENZ frequency'''

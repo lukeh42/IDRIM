@@ -7,7 +7,8 @@ nm = 1e-9
 T0 = 300 #Ambient Temperature (K)
 Gwcm2 = 1e+13 #Power Units
 
-#Material Constants !M! Note that these can and will change with ITO samples!
+#Material Constants !M! Note that these can and will change with ITO samples! 
+#These constants were calculated for a 407nm sample.
 N =  7.959978255227007e+26			#Electron Density (per m^3) old file had 2.0585e+27
 eps_inf = 3.45						#High Frequency Permittivity Limit
 me_min = (0.22069806462941993*m_e)	#Effective Mass at Bottom of Band (old 0.3964)

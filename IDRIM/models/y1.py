@@ -36,17 +36,17 @@ def Core(I, Relations, Parameters, Y):
 	Num = 0
 	VarArray_dict = GenerateCoreInitial(Relations, Parameters)
 	for t in range(time_points):
-	
+		
+		wp_T = Interpolate(Te, temperature_array, Relations['wp'])#needed for Y13 so done here
+		
 		if Y['Y13'] == 1: #Model Y-13: Non-Constant Drude Scattering Rate
 			gamma = ScatteringTemp(Te) #has unusued second arg, defaulting to 15,000K (as per EM paper)
-			plasma_freq = Interpolate(Te, temperature_array, Relations['wp'])
-			alt_RI_array = np.sqrt(Permittivity(WavelengthToFrequency(Parameters['wavelength']), plasma_freq, gamma))
-			n = Interpolate(Te, temperature_array, alt_RI_array)
+			n = np.sqrt(Permittivity(WavelengthToFrequency(Parameters['wavelength']), wp_T, gamma))
 		else:
 			n = Interpolate(Te, temperature_array, Relations['RI']) #Relations['RI'] will be constant gamma
 		
 		gep = gCoefficient(Tp)
-		wp_T = Interpolate(Te, temperature_array, Relations['wp'])
+		
 		R, T, A = TMM_Run(n, Parameters['wavelength'], Parameters['thick'], Parameters['angle'])
 		alpha = AbsorbCoeff(n, WavelengthToFrequency(Parameters['wavelength']))
 		tee = ElectronRelax(Te, wp_T, WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'])
@@ -80,9 +80,6 @@ def Core(I, Relations, Parameters, Y):
 			ycone = 2
 		
 		#Model Y-11 occurs further down, it's phonon decay term.
-		
-		
-		#This works by checking the list for the number.
 		
 		#CheckFitParameter(WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'], ElectronHC(300, Relations['Ce']))#Checking for errors
 		CheckART(R, T, A) # checking for errors
@@ -138,7 +135,8 @@ def Angle_Run(Relations, Parameters, I, Y, AngleRes=10):
 def Wavelength_Run(Relations, Parameters, I, Y, WavelengthRes=100):
 	Wavelength_min = 700
 	Wavelength_max = 1500
-	#enz wavelength for ITO is 1204nm from new paper
+	#enz wavelength depends on sample
+	
 	Lambda_points = int((Wavelength_max - Wavelength_min)/WavelengthRes)
 	VarMatrix_dict = GenerateMatrixInitial(Lambda_points)
 	Temax_array = np.zeros(Lambda_points)
