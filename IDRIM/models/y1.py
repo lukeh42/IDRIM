@@ -45,7 +45,7 @@ def Core(I, Relations, Parameters, Y):
 		else:
 			n = Interpolate(Te, temperature_array, Relations['RI']) #Relations['RI'] will be constant gamma
 		
-		gep = gCoefficient(Tp, Te, wp_T, WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'])
+		gep = gCoefficient(Tp, WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'])
 		
 		R, T, A = TMM_Run(n, Parameters['wavelength'], Parameters['thick'], Parameters['angle'])
 		alpha = AbsorbCoeff(n, WavelengthToFrequency(Parameters['wavelength']))

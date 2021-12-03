@@ -45,7 +45,7 @@ def GenInitialRTA(RI_array, wavelength, d_list, angle):
 	nR0, nT0, nA0 = TMM_Run(n0_fresh, wavelength, d_list, angle)
 	return nR0, nT0, nA0
 
-def gCoefficient(Tp, Te, wp, pumpf, Fit):
+def gCoefficient(Tp, pumpf, Fit):
 	'''Coupling Coefficient. Returns g_ep. Requires Phonon Temperature.'''
 	tau_e = ElectronRelax(300, wp0, pumpf, Fit)#300 comes from Electron Temperature;wp0 is used for plasma freq at 300K
 	Lf = tau_e*vf #mean free path calculation
