@@ -27,7 +27,7 @@ def ElectronHC(Temp, Ce):
 #Transfer Matrix Method
 def TMM_Run(n, wavelength, d_list, angle, pol="p"):
 	'''Run Transfer Matrix Method. Returns R, T, A in that order.'''
-	th0 = angle*degree
+	th0 = angle*degree #convert to radians
 	wavelength = wavelength/nm
 	n_list = [1, n, 1.5, 1] #List of Refractive Indices
 	TMM_out = coh_tmm(pol, n_list, d_list, th0, wavelength)
@@ -71,9 +71,11 @@ def AbsorbCoeff(n, pumpf):
 	'''Absorbance Coefficient. NOT OPTICAL ABSORBANCE! Needs refractive index, or just imag part'''
 	return 2*pumpf/c*n.imag
 	
-def POWER(t, I0, A, alpha, pulse):
-	'''Absorbed power density. Needs time point, incident intensity, optical absorption and material absorption'''
-	return A*I0*alpha*np.exp(-2*(t/pulse)**2)
+def POWER(t, I0, A, alpha, pulse, s=0):
+	'''Absorbed power density. Needs time point, incident intensity, optical absorption and material absorption.
+	Now includes s parameter, changes temporal position of peak of gaussian. Make sure it's in ps. Defaults to zero for backwards compatibility.
+	'''
+	return A*I0*alpha*np.exp(-2*((t-s)/pulse)**2)
 
 def IntensityArrayIndex(I, IntRes):
 	'''Returns index for the input intensity value. Intensity arrays must be of correct +1 dimension.'''

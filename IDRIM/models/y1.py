@@ -31,7 +31,7 @@ def DeltaTpAlt(Cp, gep, tep, N, Te, Tp, yconp):
 	return (gep*(Te-Tp) + ((N)/(yconp*tep))-CON*(Tp-300))*(Dt/Cp)
 
 
-def Core(I, Relations, Parameters, Y):
+def Core(I, Relations, Parameters, Y, peak_point=0):
 	Te=Tp=T0
 	Num = 0
 	VarArray_dict = GenerateCoreInitial(Relations, Parameters)
@@ -43,10 +43,10 @@ def Core(I, Relations, Parameters, Y):
 			gamma = ScatteringTemp(Te) #has unusued second arg, defaulting to 15,000K (as per EM paper)
 			n = np.sqrt(Permittivity(WavelengthToFrequency(Parameters['wavelength']), wp_T, gamma))
 		else:
-			n = Interpolate(Te, temperature_array, Relations['RI']) #Relations['RI'] will be constant gamma
+			n = Interpolate(Te, temperature_array, Relations['RI']) #Relations['RI'] will have constant gamma
 		
 		gep = gCoefficient(Tp, WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'])
-		
+
 		R, T, A = TMM_Run(n, Parameters['wavelength'], Parameters['thick'], Parameters['angle'])
 		alpha = AbsorbCoeff(n, WavelengthToFrequency(Parameters['wavelength']))
 		tee = ElectronRelax(Te, wp_T, WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'])
@@ -66,7 +66,7 @@ def Core(I, Relations, Parameters, Y):
 			alphaprime=4.18e6
 			P = yPower(time_array[t], I*Gwcm2, alphaprime, Parameters['pulse'])
 		else:
-			P = POWER(time_array[t], I*Gwcm2, A, alpha, Parameters['pulse'])
+			P = POWER(time_array[t], I*Gwcm2, A, alpha, Parameters['pulse'], peak_point*1e-12)
 		
 		if Y['Y7'] == 1: #Model Y-7: Phonon Relaxation Coefficient Change
 			tep = yPhononRelax(Ce, gep)

@@ -13,10 +13,11 @@ N =  7.959978255227007e+26			#Electron Density (per m^3) old file had 2.0585e+27
 eps_inf = 3.45						#High Frequency Permittivity Limit
 me_min = (0.22069806462941993*m_e)	#Effective Mass at Bottom of Band (old 0.3964)
 eta = (0.4191/e) 					#Non-parabolic constant. Old file was C #changed for clarity
-TD = 1000 							#Debye Temperature (K)
-wp0 = (2.5e15)		 				#Plasma Frequency
+wp0 = (2.5e15)		 				#Plasma Frequency at rest as measured.
 gamma0 = (wp0/(11.5))				#Drude Scattering Rate at 300K (Assumed to be a constant)
-n0 = 0.42+0.42j						#Rest Refractive Index (not used, and shouldn't be used)
+
+#These constants shouldn't change
+TD = 1000 							#Debye Temperature (K)
 Ef = 1*eV							#Fermi Level at 300K was 1.036327*eV #Now is the Fermi Energy
 vf = np.sqrt(2*Ef/me_min) 			#Fermi Velocity at 300K
 Tf = Ef/k							#Fermi Temperature (at 1eV, this is 11,600K)

@@ -76,7 +76,7 @@ def GenMu(Skip=0):
 		mu_array = np.zeros(shape=DIM)
 		for i in range(DIM):
 			T = temperature_array[i]
-			mu_array[i] = fsolve(Mu_Function, Ef, args=(T))
+			mu_array[i] = fsolve(Mu_Function, 0.5*e, args=(T))
 			#mu_array = np.append(mu_array, fsolve(Mu_Function, 0.5*e, args=(T)))
 			
 		np.savetxt(Mu_Path, mu_array)
@@ -225,5 +225,3 @@ def GenRefractiveIndex(pump_freq, wp, gamma=gamma0, Skip=0):
 		np.savetxt(RIi_path, RI_array.imag)
 		print("Refractive Index array generated and saved.")
 	return RI_array
-
-

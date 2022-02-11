@@ -52,10 +52,12 @@ def LoadOldParamsChecker(ParamDictIn):
 	return Outline
 	
 def Regeneration(SysParams_dict, OVERRIDE = 0):
-	'''Master function that calls a bunch of other functions dependent on outcome of f:LoadOldParamsChecker. Optional OVERRIDE is avaliable to force a regeneration of arrays regardless. Set to 1 (or anything that isnt 0)'''
-	Skipper = LoadOldParamsChecker(SysParams_dict)
+	'''Master function that calls a bunch of other functions dependent on outcome of f:LoadOldParamsChecker. Optional OVERRIDE is avaliable to force a regeneration of arrays regardless. Set to 1 (or anything that isnt 0)
+	Override = -1 skips loading, saving and RI generation. Used only for testing. '''
+	if OVERRIDE != -1:
+		Skipper = LoadOldParamsChecker(SysParams_dict)
 	if OVERRIDE != 0:
-		Skipper = 2 
+		Skipper = 2
 	if Skipper == 1:
 		print("No change in parameters detected.")
 	elif Skipper == 0:
@@ -67,10 +69,15 @@ def Regeneration(SysParams_dict, OVERRIDE = 0):
 	Cp_array = GenPhononHC(Skipper)
 	Ce_array = GenElectronHC(mu_array, Skipper)
 	wp_array = GenPlasmaFrequency(GenAvgEffMass(mu_array), Skipper)
-	RI_array = GenRefractiveIndex(WavelengthToFrequency(SysParams_dict['wavelength']), wp_array, Skip=Skipper)
-	SaveParameters(SysParams_dict)
-	Ce300 = ElectronHC(300, Ce_array)
-	Fit = FitParameterSolver(WavelengthToFrequency(SysParams_dict['wavelength']), Ce300)
+	if OVERRIDE != -1:
+		RI_array = GenRefractiveIndex(WavelengthToFrequency(SysParams_dict['wavelength']), wp_array, Skip=Skipper)
+	if OVERRIDE != -1:
+		SaveParameters(SysParams_dict)
+		Ce300 = ElectronHC(300, Ce_array)
+		Fit = FitParameterSolver(WavelengthToFrequency(SysParams_dict['wavelength']), Ce300)
+	if OVERRIDE == -1:
+		RI_array = 0
+		Fit = 0
 	
 	print("\n\nREGENERATION COMPLETE.")
 	
