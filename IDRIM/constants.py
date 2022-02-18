@@ -22,6 +22,7 @@ Ef = 1*eV							#Fermi Level at 300K was 1.036327*eV #Now is the Fermi Energy
 vf = np.sqrt(2*Ef/me_min) 			#Fermi Velocity at 300K
 Tf = Ef/k							#Fermi Temperature (at 1eV, this is 11,600K)
 Lf = 1.577483e-14*vf 				#Mean Free Path (Relaxation rate at 300K * vf)
+n_substrate = 1.5					#Refractive Index of Substrate
 
 #Convenience constants (Absorptive loss and band non-parabolicity as a physical origin of large nonlinearity in epsilon-near-zero materials. R. Secendo et al.)
 a = 1/(2*eta)

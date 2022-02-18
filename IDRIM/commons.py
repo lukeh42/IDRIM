@@ -25,11 +25,11 @@ def ElectronHC(Temp, Ce):
 	return Interp_Func(Temp)
 
 #Transfer Matrix Method
-def TMM_Run(n, wavelength, d_list, angle, pol="p"):
+def TMM_Run(n, wavelength, d_list, angle, n_sub = n_substrate, pol="p"):
 	'''Run Transfer Matrix Method. Returns R, T, A in that order.'''
 	th0 = angle*degree #convert to radians
 	wavelength = wavelength/nm
-	n_list = [1, n, 1.5, 1] #List of Refractive Indices
+	n_list = [1, n, n_sub, 1] #List of Refractive Indices
 	TMM_out = coh_tmm(pol, n_list, d_list, th0, wavelength)
 	R = TMM_out['R']
 	T = TMM_out['T']
