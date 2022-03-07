@@ -46,7 +46,7 @@ def GenDOSArrays():
 def FermiDirac(E, mu_T, T):
 	'''Fermi Dirac Distribution. Returns value given input parameters.'''
 	x = (mu_T - E)/(k*T)
-	return expit(x) #expit(x)# 1/(1+exp(-x))
+	return expit(x) #expit(x) = 1/(1+exp(-x))
 
 #Chemical Potential
 
@@ -154,7 +154,7 @@ def EffMassConventional(E):
 	return ((a**4)/(hbar**2*b*((E+a))**3) )**(-1)
 
 def EffMassWeighted(E):
-	'''Weighted effective mass. 2/3 optical + 1/3 conventonal. Used in this model.'''
+	'''Weighted effective mass. 2/3 optical + 1/3 conventional. Used in this model.'''
 	return (((2/3)*a**2/(hbar**2*b*(E+a))) + ((1/3)*(a**4)/(hbar**2*b*((E+a))**3)))**(-1)
 
 def GenEffMasses():
@@ -167,21 +167,26 @@ def GenEffMasses():
 
 #Average Effective Mass
 
-def AvgEffMassIntegrand(E, mu_T, T):
+def AvgEffMassIntegrand(E, mu_T, T, DEX=0):
 	'''Average Effective Mass integrand. You probably want f:AvgEffMassIntegrate.'''
-	return (1/N)*(TCO_DOS(E)*FermiDirac(E, mu_T, T))/(EffMassWeighted(E))
+	if DEX == 0: #Weighted Effective Mass
+		return (1/N)*(TCO_DOS(E)*FermiDirac(E, mu_T, T))/(EffMassWeighted(E))
+	if DEX == 1: #Optical Effective Mass (Same as Extended Paper)
+		return (1/N)*(TCO_DOS(E)*FermiDirac(E, mu_T, T))/(EffMassOptical(E))
+	if DEX == 2: #Conventional Effective Mass
+		return (1/N)*(TCO_DOS(E)*FermiDirac(E, mu_T, T))/(EffMassConventional(E))
 
-def AvgEffMassIntegrate(mu_T, T):
+def AvgEffMassIntegrate(mu_T, T, DEX=0):
 	'''Integrates for average effective mass.'''
-	return 1/(quad(AvgEffMassIntegrand, 0, 100*e, args=(mu_T, T))[0])
+	return 1/(quad(AvgEffMassIntegrand, 0, 100*e, args=(mu_T, T, DEX))[0])
 
-def GenAvgEffMass(mu_array):
+def GenAvgEffMass(mu_array, DEX=0):
 	'''Generates and returns average effective mass. Requires chemical potential input.'''
 	AvgEffMass_array = np.zeros(shape=DIM)
 	for i in range(DIM):
 		mu_T = mu_array[i]
 		T = temperature_array[i]
-		AvgEffMass_array[i] = AvgEffMassIntegrate(mu_T, T)
+		AvgEffMass_array[i] = AvgEffMassIntegrate(mu_T, T, DEX)
 	return AvgEffMass_array
 	
 # Plasma Frequency

@@ -42,8 +42,11 @@ def Core(I, Relations, Parameters, Y, peak_point=0):
 		if Y['Y13'] == 1: #Model Y-13: Non-Constant Drude Scattering Rate
 			gamma = ScatteringTemp(Te) #has unusued second arg, defaulting to 15,000K (as per EM paper)
 			n = np.sqrt(Permittivity(WavelengthToFrequency(Parameters['wavelength']), wp_T, gamma))
+			
 		else:
 			n = Interpolate(Te, temperature_array, Relations['RI']) #Relations['RI'] will have constant gamma
+		nr = n.real
+		ni = n.imag
 		
 		gep = gCoefficient(Tp, WavelengthToFrequency(Parameters['wavelength']), Relations['Fit'])
 
@@ -89,7 +92,7 @@ def Core(I, Relations, Parameters, Y, peak_point=0):
 			Tp = Tp + DeltaTp(Cp, gep, tep, Num, Te, Tp, yconp)
 		Num = Num + DeltaN(Num, P, tep, tee, ycone, yconp)
 
-		Coef_dict = {'n':n, 'gep':gep,'Ce':Ce,'Cp':Cp,'wp':wp_T,'tau_e':tee,'tau_p':tep,'R':R,'T':T,'A':A,'alpha':alpha,'S':P} 
+		Coef_dict = {'nr':nr, 'ni':ni, 'gep':gep,'Ce':Ce,'Cp':Cp,'wp':wp_T,'tau_e':tee,'tau_p':tep,'R':R,'T':T,'A':A,'alpha':alpha,'S':P} 
 		VarArray_dict = CoreArrayUpdate(Te, Tp, Num, Coef_dict, VarArray_dict, t)
 	return VarArray_dict
 	

@@ -81,8 +81,8 @@ def Solver(wp0, Ef=1*e, ENZ=212e12):
 	PlasmaFreq = np.sqrt((N*e**2)/(epsilon_0*m_avg))
 	PermModel = Permittivity(Frequency_array, PlasmaFreq)
    
-	plt.plot(Frequency_array/(1e12*2*pi), PermExperiment.real, label="Experiment")
-	plt.plot(Frequency_array/(1e12*2*pi), PermModel.real, label="Model")
+	plt.plot(Frequency_array/(1e12*2*pi), PermExperiment.real, label="300K Plasma Freq Constant")
+	plt.plot(Frequency_array/(1e12*2*pi), PermModel.real, label="Calculated Plasma Frequency")
 	plt.axhline(0, color="black", linestyle="dashed", label="ENZ Line")
 	plt.axvline(ENZ/1e12, color="black", linestyle="dotted", label="ENZ Frequency")
 	plt.xlabel("Frequency (THz)")

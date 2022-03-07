@@ -33,11 +33,15 @@ def CoreArrayUpdate(Te, Tp, Num, Coefficient_dict, VarArray_dict, i):
 	VarArray_dict['T'][i] = Coefficient_dict['T']
 	VarArray_dict['R'][i] = Coefficient_dict['R']
 	VarArray_dict['A'][i] = Coefficient_dict['A']
+	VarArray_dict['nr'][i] = Coefficient_dict['nr']
+	VarArray_dict['ni'][i] = Coefficient_dict['ni']
 	return VarArray_dict
 	
 def CoreCoefficientUpdate(Te, Tp, j, I, Relations_dict, SysParams_dict, Fit):
 	'''Function that serves purely to save duplicating this code. Then updates a dictionary with new values, then returns that dictionary.'''
 	n = Interpolate(Te, temperature_array, Relations_dict['RI'])
+	nr = n.real
+	ni = n.imag
 	gep = gCoefficient(Tp)
 	Ce_T = ElectronHC(Te, Relations_dict['Ce']) #special case interpolation
 	Cp_T = Interpolate(Tp, temperature_array, Relations_dict['Cp']) #old file used DebyePhononHC, slower than this
@@ -50,7 +54,7 @@ def CoreCoefficientUpdate(Te, Tp, j, I, Relations_dict, SysParams_dict, Fit):
 	alpha = AbsorbCoeff(n, WavelengthToFrequency(SysParams_dict['wavelength']))
 	S = POWER(time_array[j], I*Gwcm2, A, alpha, SysParams_dict['pulse'])
 	
-	Coef_dict = {'n':n, 'gep':gep,'Ce':Ce_T,'Cp':Cp_T,'wp':wp_T,'tau_e':tau_e,'tau_p':tau_p,'R':R,'T':T,'A':A,'alpha':alpha,'S':S} 
+	Coef_dict = {'nr':nr, 'ni':ni, 'gep':gep,'Ce':Ce_T,'Cp':Cp_T,'wp':wp_T,'tau_e':tau_e,'tau_p':tau_p,'R':R,'T':T,'A':A,'alpha':alpha,'S':S} 
 	return Coef_dict
 	
 def GenerateCoreInitial(Relations_dict, SysParams_dict):
@@ -62,8 +66,10 @@ def GenerateCoreInitial(Relations_dict, SysParams_dict):
 	Tra_array = np.full(time_points, nT0)
 	Ref_array = np.full(time_points, nR0)
 	Abs_array = np.full(time_points, nA0)
+	nr_array = np.zeros(time_points)
+	ni_array = np.zeros(time_points)
 	
-	VarArray_dict = {'Te':Te_array, 'Tp':Tp_array, 'Num':Num_array, 'T':Tra_array, 'R':Ref_array, 'A':Abs_array}
+	VarArray_dict = {'Te':Te_array, 'Tp':Tp_array, 'Num':Num_array, 'T':Tra_array, 'R':Ref_array, 'A':Abs_array, 'nr':nr_array, 'ni':ni_array}
 	return VarArray_dict
 
 def GenerateMatrixInitial(I_points):
