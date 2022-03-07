@@ -9,12 +9,12 @@ Gwcm2 = 1e+13 #Power Units
 
 #Material Constants !M! Note that these can and will change with ITO samples! 
 #These constants were calculated for a 407nm sample.
-N =  7.959978255227007e+26			#Electron Density (per m^3) old file had 2.0585e+27
+N =  1.0071911873153335e+27			#Electron Density (per m^3) old file had 2.0585e+27
 eps_inf = 3.45						#High Frequency Permittivity Limit
-me_min = (0.22069806462941993*m_e)	#Effective Mass at Bottom of Band (old 0.3964)
+me_min = (0.2581855200821601*m_e)	#Effective Mass at Bottom of Band (old 0.3964)
 eta = (0.4191/e) 					#Non-parabolic constant. Old file was C #changed for clarity
-wp0 = (2.5e15)		 				#Plasma Frequency at rest as measured.
-gamma0 = (wp0/(11.5))				#Drude Scattering Rate at 300K (Assumed to be a constant)
+wp0 = (2.6e15)		 				#Plasma Frequency at rest as measured.
+gamma0 = 430e12						#Drude Scattering Rate at 300K (Assumed to be a constant)
 
 #These constants shouldn't change
 TD = 1000 							#Debye Temperature (K)

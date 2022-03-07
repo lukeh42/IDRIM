@@ -67,7 +67,7 @@ def OldMatrixMethod(n_ito, n_sub, freq, d_ito, d_sub, points):
 		
 	return R, T, A
 
-def MatrixMethod(n_ito, n_sub, wavel, d_ito, d_sub, points):
+def MatrixMethod(n_ito, n_sub, wavel, d_ito, d_sub, points, angle=0,):
 	'''
 	n_ito: RI array of ITO sample. n_sub: RI of substrate. freq: frequency array. d_ito: thickness of ito sample.
 	d_sub: thickness of substrate. points: length of arrays.
@@ -78,5 +78,5 @@ def MatrixMethod(n_ito, n_sub, wavel, d_ito, d_sub, points):
 	A = np.zeros(points)	
 	
 	for i in range(points):
-		R[i], T[i], A[i] = TMM_Run(n_ito[i], wavel[i], [inf, d_ito/nm, d_sub/nm, inf], 0)
+		R[i], T[i], A[i] = TMM_Run(n_ito[i], wavel[i], [inf, d_ito/nm, d_sub/nm, inf], angle)
 	return R, T, A
