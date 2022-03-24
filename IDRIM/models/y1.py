@@ -91,7 +91,7 @@ def Core(I, Relations, Parameters, Y, peak_point=0):
 		else:
 			Tp = Tp + DeltaTp(Cp, gep, tep, Num, Te, Tp, yconp)
 		Num = Num + DeltaN(Num, P, tep, tee, ycone, yconp)
-
+		
 		Coef_dict = {'nr':nr, 'ni':ni, 'gep':gep,'Ce':Ce,'Cp':Cp,'wp':wp_T,'tau_e':tee,'tau_p':tep,'R':R,'T':T,'A':A,'alpha':alpha,'S':P} 
 		VarArray_dict = CoreArrayUpdate(Te, Tp, Num, Coef_dict, VarArray_dict, t)
 	return VarArray_dict

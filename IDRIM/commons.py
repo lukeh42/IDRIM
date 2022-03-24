@@ -68,7 +68,7 @@ def PhononRelax(g, Ce):
 	return 2*Ce/g
 	
 def AbsorbCoeff(n, pumpf):
-	'''Absorbance Coefficient. NOT OPTICAL ABSORBANCE! Needs refractive index, or just imag part'''
+	'''Absorbance Coefficient. NOT OPTICAL ABSORBANCE! Needs refractive index'''
 	return 2*pumpf/c*n.imag
 	
 def POWER(t, I0, A, alpha, pulse, s=0):

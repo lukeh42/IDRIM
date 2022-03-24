@@ -6,7 +6,7 @@ from IDRIM.commons import *
 
 def M_GraphStaple():
 	'''Sets settings for all graphs in notebook. No args. Edit graph.py to change.'''
-	textsize = 15
+	textsize = 18
 	font = {'family': 'DejaVu Sans', 'weight': 'normal','size': textsize,}
 	plt.rc('font', family='DejaVu Sans', serif='Times')
 	plt.rc('text', usetex=False)

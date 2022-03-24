@@ -32,7 +32,7 @@ b = (me_min)/(2*eta*hbar**2)
 temp_max = 20000 					# Maximum Temperature (K)
 Intensity_max = 400					# Max Intensity, GW/cm^2 #400 as that is the highest anyone has taken sample
 DIM = 1000							# Length of arrays
-time_points = 10000				# Time Resolution
+time_points = 30000					# Time Resolution
 
 #System arrays that shouldn't need changing.
 time_array = np.linspace(-1500, 1500, time_points)*1e-15	 	# Time array.
