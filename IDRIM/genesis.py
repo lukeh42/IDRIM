@@ -51,7 +51,7 @@ def LoadOldParamsChecker(ParamDictIn):
 		
 	return Outline
 	
-def Regeneration(SysParams_dict, OVERRIDE = 0):
+def Regeneration(SysParams_dict, OVERRIDE = 0, Text=1):
 	'''Master function that calls a bunch of other functions dependent on outcome of f:LoadOldParamsChecker. Optional OVERRIDE is avaliable to force a regeneration of arrays regardless. Set to 1 (or anything that isnt 0)
 	Override = -1 skips loading, saving and RI generation. Used only for testing. '''
 	if OVERRIDE != -1:
@@ -59,18 +59,21 @@ def Regeneration(SysParams_dict, OVERRIDE = 0):
 	if OVERRIDE != 0:
 		Skipper = 2
 	if Skipper == 1:
-		print("No change in parameters detected.")
+		if Text == 1:
+			print("No change in parameters detected.")
 	elif Skipper == 0:
-		print("Change in parameters detected. Regenerating arrays.")
+		if Text == 1:
+			print("Change in parameters detected. Regenerating arrays.")
 	else:
-		print("OVERRIDE Detected. Regenerating.")
+		if Text == 1:
+			print("OVERRIDE Detected. Regenerating.")
 		Skipper = 0
-	mu_array = GenMu(Skipper) #strictly speaking Mu only relies on max temp and DIM, optimisation?
-	Cp_array = GenPhononHC(Skipper)
-	Ce_array = GenElectronHC(mu_array, Skipper)
-	wp_array = GenPlasmaFrequency(GenAvgEffMass(mu_array), Skipper)
+	mu_array = GenMu(Skipper, Text) #strictly speaking Mu only relies on max temp and DIM, optimisation?
+	Cp_array = GenPhononHC(Skipper, Text)
+	Ce_array = GenElectronHC(mu_array, Skipper, Text)
+	wp_array = GenPlasmaFrequency(GenAvgEffMass(mu_array), Skipper, Text)
 	if OVERRIDE != -1:
-		RI_array = GenRefractiveIndex(WavelengthToFrequency(SysParams_dict['wavelength']), wp_array, Skip=Skipper)
+		RI_array = GenRefractiveIndex(WavelengthToFrequency(SysParams_dict['wavelength']), wp_array, Skip=Skipper, Text=Text)
 	if OVERRIDE != -1:
 		SaveParameters(SysParams_dict)
 		Ce300 = ElectronHC(300, Ce_array)
@@ -78,8 +81,8 @@ def Regeneration(SysParams_dict, OVERRIDE = 0):
 	if OVERRIDE == -1:
 		RI_array = 0
 		Fit = 0
-	
-	print("\n\nREGENERATION COMPLETE.")
+	if Text == 1:
+		print("\n\nREGENERATION COMPLETE.")
 	
 	return mu_array, Cp_array, Ce_array, wp_array, RI_array, Fit
 	

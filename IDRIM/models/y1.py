@@ -16,7 +16,8 @@ from IDRIM.modcom import * #Common model functions
 from IDRIM.ymodcom import * #ymodel common funcs
 
 PATH = "y1_"
-CON = 1e18
+CON = 1e18#used for controlling phonon heat decay
+gaT0 = 15000#used for controlling temperature dependent drude scattering rate
 
 def DeltaN(N, P, tep, tee, ycone, yconp):
 	return (P - ((N)/(yconp*tep)) - ((N)/(ycone*tee)))*Dt
@@ -69,7 +70,7 @@ def Core(I, Relations, Parameters, Y, peak_point=0):
 			alphaprime=4.18e6
 			P = yPower(time_array[t], I*Gwcm2, alphaprime, Parameters['pulse'])
 		else:
-			P = POWER(time_array[t], I*Gwcm2, A, alpha, Parameters['pulse'], peak_point*1e-12)
+			P = POWER(time_array[t], I*Gwcm2, A, alpha, Parameters['pulse'], peak_point)
 		
 		if Y['Y7'] == 1: #Model Y-7: Phonon Relaxation Coefficient Change
 			tep = yPhononRelax(Ce, gep)

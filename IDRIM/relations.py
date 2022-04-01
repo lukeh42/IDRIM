@@ -63,16 +63,19 @@ def Mu_Function(mu_T, T):
 	return Mu_Integrate(mu_T, T)-N
 	
 
-def GenMu(Skip=0):
+def GenMu(Skip=0, Text=1):
 	'''Generates and returns chemical potential. Optional Skip arg controls whether to Load from saved file (Skip=1) or Generate Mu.(Skip=else)'''
 	Mu_Path = "data\Mu_array.txt"
 	if Skip == 1:
-		print("Not solving for Chemical Potential. Loading from previously saved data.")
+		if Text == 1:
+			print("Not solving for Chemical Potential. Loading from previously saved data.")
 		mu_array = np.genfromtxt(Mu_Path)
-		print("Mu Loaded.")
+		if Text == 1:
+			print("Mu Loaded.")
 	
 	else:
-		print("Solving Chemical Potential. This may take some time.")
+		if Text == 1:
+			print("Solving Chemical Potential. This may take some time.")
 		mu_array = np.zeros(shape=DIM)
 		for i in range(DIM):
 			T = temperature_array[i]
@@ -80,7 +83,8 @@ def GenMu(Skip=0):
 			#mu_array = np.append(mu_array, fsolve(Mu_Function, 0.5*e, args=(T)))
 			
 		np.savetxt(Mu_Path, mu_array)
-		print("Mu Generated and Saved.")
+		if Text == 1:
+			print("Mu Generated and Saved.")
 	return mu_array
 	
 # Phonon Heat Capacity
@@ -93,21 +97,25 @@ def DebyePhononHC(T):
 	'''Returns integral result of Debye Model for Phonon Heat Capacity.'''
 	return quad(DebyeIntegrand, 0, (TD/T), args=(T))[0]
 
-def GenPhononHC(Skip=0):
+def GenPhononHC(Skip=0,Text=1):
 	'''Generates Phonon Heat Capacity using the Debye Model. Skip arg controls whether it is loaded from file (Skip=1) or generated from scratch (Skip=else).'''
 	Cp_path = "data\Cp_array.txt"
 	if Skip == 1:
-		print("Not solving Phonon Heat Capacity. Loading from saved file.")
+		if Text == 1:
+			print("Not solving Phonon Heat Capacity. Loading from saved file.")
 		Cp_array = np.genfromtxt(Cp_path)
-		print("Phonon Heat Capacity loaded.")
+		if Text == 1:
+			print("Phonon Heat Capacity loaded.")
 	else:
-		print("Generating Phonon Heat Capacity.")
+		if Text == 1:
+			print("Generating Phonon Heat Capacity.")
 		Cp_array = np.zeros(shape=DIM)
 		for i in range(DIM):
 			T = temperature_array[i]
 			Cp_array[i] = DebyePhononHC(T)
 		np.savetxt(Cp_path, Cp_array)
-		print("Phonon Heat Capacity generated and saved.")
+		if Text == 1:
+			print("Phonon Heat Capacity generated and saved.")
 	return Cp_array
 	
 # Electron Heat Capacity
@@ -120,15 +128,18 @@ def ElectronHCEnergy(E, mu_T, T):
 	'''Returns integration result for use in calculating electron heat capacity.'''
 	return quad(ElectronHCIntegrand, 0, 100*e, args=(mu_T, T))[0]
 
-def GenElectronHC(mu_array, Skip=0):
+def GenElectronHC(mu_array, Skip=0, Text=1):
 	'''Generates electron heat capacity. Requires chemical potential input. Skip=1 loads a pre-generated file and Skip=0 generates from scratch.'''
 	Ce_path = "data\Ce_array.txt"
 	if Skip == 1:
-		print("Not solving Electron Heat Capacity. Loading from saved file.")
+		if Text == 1:
+			print("Not solving Electron Heat Capacity. Loading from saved file.")
 		Ce_array = np.genfromtxt(Ce_path)
-		print("Electron Heat Capacity loaded.")
+		if Text == 1:
+			print("Electron Heat Capacity loaded.")
 	else:
-		print("Generating Electron Heat Capacity.")
+		if Text == 1:
+			print("Generating Electron Heat Capacity.")
 		HC_energy_array = np.zeros(shape=DIM)
 		for i in range(DIM):
 			mu_T = mu_array[i]
@@ -136,13 +147,14 @@ def GenElectronHC(mu_array, Skip=0):
 			HC_energy_array[i] = ElectronHCEnergy(energy_array, mu_T, T)
 		Ce_array = ((np.diff(HC_energy_array))/(np.diff(temperature_array)))
 		np.savetxt(Ce_path, Ce_array)
-		print("Electron Heat Capacity generated and saved.")
+		if Text == 1:
+			print("Electron Heat Capacity generated and saved.")
 	return Ce_array
 
 # Effective Masses
 
 def EffMassExtended(E):
-	'''Returns Standard effective mass'''
+	'''Returns Extended effective mass'''
 	return me_min*(1+2*eta*E)
 
 def EffMassOptical(E):
@@ -151,12 +163,14 @@ def EffMassOptical(E):
 
 def EffMassConventional(E):
 	'''Returns conventional effective mass'''
-	return ((a**4)/(hbar**2*b*((E+a))**3) )**(-1)
+	#return ((a**4)/(hbar**2*b*((E+a))**3) )**(-1)#old definition, same as \/\/\/
+	return (me_min*(2*eta*E+1)**3)
 
 def EffMassWeighted(E):
 	'''Weighted effective mass. 2/3 optical + 1/3 conventional. Used in this model.'''
-	return (((2/3)*a**2/(hbar**2*b*(E+a))) + ((1/3)*(a**4)/(hbar**2*b*((E+a))**3)))**(-1)
-
+	#return (((2/3)*a**2/(hbar**2*b*(E+a))) + ((1/3)*(a**4)/(hbar**2*b*((E+a))**3)))**(-1)#old definition
+	return ((2/3)*(1)/(me_min*(2*eta*E+1)) + (1/3)*(1)/(me_min*(2*eta*E+1)**3))**(-1)
+	
 def GenEffMasses():
 	'''Generates effective masses and returns their arrays. ORDER: EXT, OPT, CON, WEI.'''
 	Extended_array = EffMassExtended(energy_array)
@@ -191,18 +205,22 @@ def GenAvgEffMass(mu_array, DEX=0):
 	
 # Plasma Frequency
 
-def GenPlasmaFrequency(AEM, Skip=0):
+def GenPlasmaFrequency(AEM, Skip=0,Text=1):
 	'''Generates and returns plasma frequency. Requires average effective mass array. Skip=0 generates, Skip=1 loads from saved file.'''
 	wp_path = "data\wp_array.txt"
 	if Skip == 1:
-		print("Loading Plasma Frequency from saved file.")
+		if Text == 1:
+			print("Loading Plasma Frequency from saved file.")
 		wp_array = np.genfromtxt(wp_path)
-		print("Loaded Plasma Frequency.")
+		if Text == 1:
+			print("Loaded Plasma Frequency.")
 	else:
-		print("Generating Plasma Frequency")
+		if Text == 1:
+			print("Generating Plasma Frequency")
 		wp_array = np.sqrt((N*e**2)/(epsilon_0*AEM))	
 		np.savetxt(wp_path, wp_array)
-		print("Plasma Frequency array generated and saved.")
+		if Text == 1:
+			print("Plasma Frequency array generated and saved.")
 	return wp_array
 
 # Refractive Index
@@ -211,22 +229,26 @@ def Permittivity(w, wp, gamma=gamma0):
 	'''Simply returns permittivity given a frequency, plasma frequency and optionally a scattering rate.'''
 	return eps_inf - ((wp**2)/(w**2+1j*w*gamma))
 
-def GenRefractiveIndex(pump_freq, wp, gamma=gamma0, Skip=0):
+def GenRefractiveIndex(pump_freq, wp, gamma=gamma0, Skip=0, Text=1):
 	'''Generates refractive index array. Requires pump frequency, plasma frequency array. Skip=0 generates from scratch, Skip=1 loads from data.'''
 	#Refractive Index must be split into real and imaginary when saving to file. np.savetxt saves complex numbers as one object, ie "(REAL + IMAGj)" where the brackets ARE included. np.genfromtxt then creates a bunch of strings or whatever.
 	#Hence the only way to save and load refractive index is to split up real and imaginary parts and then recombine them after loading both files. Kinda interesting bug actually
 	RIr_path = "data\RIr_array.txt"
 	RIi_path = "data\RIi_array.txt"
 	if Skip == 1:
-		print("Loading Refractive Index from saved file.")
+		if Text == 1:
+			print("Loading Refractive Index from saved file.")
 		RIr_array = np.genfromtxt(RIr_path)
 		RIi_array = np.genfromtxt(RIi_path)
 		RI_array = RIr_array + 1j*RIi_array
-		print("Loaded Refractive Index")
+		if Text == 1:
+			print("Loaded Refractive Index")
 	else:
-		print("Generating Refractive Index.")
+		if Text == 1:
+			print("Generating Refractive Index.")
 		RI_array = np.sqrt(Permittivity(pump_freq, wp, gamma))
 		np.savetxt(RIr_path, RI_array.real)
 		np.savetxt(RIi_path, RI_array.imag)
-		print("Refractive Index array generated and saved.")
+		if Text == 1:
+			print("Refractive Index array generated and saved.")
 	return RI_array

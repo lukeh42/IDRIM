@@ -13,7 +13,7 @@ N =  1.0071911873153335e+27			#Electron Density (per m^3) old file had 2.0585e+2
 eps_inf = 3.45						#High Frequency Permittivity Limit
 me_min = (0.2581855200821601*m_e)	#Effective Mass at Bottom of Band (old 0.3964)
 eta = (0.4191/e) 					#Non-parabolic constant. Old file was C #changed for clarity
-wp0 = (2.6e15)		 				#Plasma Frequency at rest as measured.
+wp0 = (2.6e15)		 				#Plasma Frequency at rest.
 gamma0 = 430e12						#Drude Scattering Rate at 300K (Assumed to be a constant)
 
 #These constants shouldn't change
@@ -24,7 +24,7 @@ Tf = Ef/k							#Fermi Temperature (at 1eV, this is 11,600K)
 Lf = 1.577483e-14*vf 				#Mean Free Path (Relaxation rate at 300K * vf)
 n_substrate = 1.5					#Refractive Index of Substrate
 
-#Convenience constants (Absorptive loss and band non-parabolicity as a physical origin of large nonlinearity in epsilon-near-zero materials. R. Secendo et al.)
+#Convenience constants (Absorptive loss and band non-parabolicity as a physical origin of large nonlinearity in epsilon-near-zero materials. R. Secendo et al.) #not used in main code, still used in some side modules
 a = 1/(2*eta)
 b = (me_min)/(2*eta*hbar**2)
 
@@ -32,7 +32,7 @@ b = (me_min)/(2*eta*hbar**2)
 temp_max = 20000 					# Maximum Temperature (K)
 Intensity_max = 400					# Max Intensity, GW/cm^2 #400 as that is the highest anyone has taken sample
 DIM = 1000							# Length of arrays
-time_points = 30000					# Time Resolution
+time_points = 50000					# Time Resolution
 
 #System arrays that shouldn't need changing.
 time_array = np.linspace(-1500, 1500, time_points)*1e-15	 	# Time array.
