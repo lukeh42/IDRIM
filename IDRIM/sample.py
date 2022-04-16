@@ -89,4 +89,4 @@ def Solver(wp0, Ef=1*e, ENZ=212e12):
 	plt.ylabel("Real(Permittivity)")
 	plt.title('Model Fermi Energy: %f eV' % (Ef/eV))
 	plt.legend()
-	return
+	return PermExperiment, PermModel

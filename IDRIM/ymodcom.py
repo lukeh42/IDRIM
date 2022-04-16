@@ -25,7 +25,10 @@ def yPhononRelax(Ce, gep): # Model Y-7
 
 def ScatteringTemp(Te, gaT0):
 	'''Temperature dependent drude scattering/damping coefficient. Default for T0 from EM paper [Time Domain ENZ]'''
-	return gamma0*(1+Te/gaT0)
+	return gamma0*(1+(Te)/gaT0)
+
+def ReflectionPower(t, I0, alpha, pulse, A, R, s, x, AGI):
+	return A*I0*alpha*np.exp(-2*((t-s)/pulse)**2)+AGI*I0*alpha*A*R*np.exp(-2*((t-s-x)/pulse)**2)
 
 '''
 Depreciated functions for calculating plasma frequency through another method. 

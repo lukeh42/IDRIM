@@ -16,8 +16,11 @@ from IDRIM.modcom import * #Common model functions
 from IDRIM.ymodcom import * #ymodel common funcs
 
 PATH = "y1_"
-CON = 1e18#used for controlling phonon heat decay
+CON = 5e17 #used for controlling phonon heat decay
+DEX = 1000
 gaT0 = 15000#used for controlling temperature dependent drude scattering rate
+x = 0.4e-12
+AGI = 10
 
 def DeltaN(N, P, tep, tee, ycone, yconp):
 	return (P - ((N)/(yconp*tep)) - ((N)/(ycone*tee)))*Dt
@@ -29,7 +32,8 @@ def DeltaTp(Cp, gep, tep, N, Te, Tp, yconp):
 	return (gep*(Te-Tp) + ((N)/(yconp*tep)))*(Dt/Cp)
 
 def DeltaTpAlt(Cp, gep, tep, N, Te, Tp, yconp):
-	return (gep*(Te-Tp) + ((N)/(yconp*tep))-CON*(Tp-300))*(Dt/Cp)
+	return (gep*(Te-Tp) + ((N)/(yconp*tep))-CON*(Tp/DEX)*(Tp-300))*(Dt/Cp)
+	#return (gep*(Te-Tp) + ((N)/(yconp*tep))-CON*(Tp-300))*(Dt/Cp)
 
 
 def Core(I, Relations, Parameters, Y, peak_point=0):
@@ -41,7 +45,7 @@ def Core(I, Relations, Parameters, Y, peak_point=0):
 		wp_T = Interpolate(Te, temperature_array, Relations['wp'])#needed for Y13 so done here
 		
 		if Y['Y13'] == 1: #Model Y-13: Non-Constant Drude Scattering Rate
-			gamma = ScatteringTemp(Te) #has unusued second arg, defaulting to 15,000K (as per EM paper)
+			gamma = ScatteringTemp(Te, gaT0) #has unusued second arg, defaulting to 15,000K (as per EM paper)
 			n = np.sqrt(Permittivity(WavelengthToFrequency(Parameters['wavelength']), wp_T, gamma))
 			
 		else:
@@ -65,10 +69,11 @@ def Core(I, Relations, Parameters, Y, peak_point=0):
 		else:
 			Cp = Interpolate(Tp, temperature_array, Relations['Cp'])
 		
-		if Y['Y5'] == 1: #Model Y-5: Power Function Change
-			Ip = 20.8*Gwcm2
-			alphaprime=4.18e6
-			P = yPower(time_array[t], I*Gwcm2, alphaprime, Parameters['pulse'])
+		if Y['Y5'] == 1: #Model Y-5: Power Function Change#hijacking this
+			#Ip = 20.8*Gwcm2
+			#alphaprime=4.18e6
+			#P = yPower(time_array[t], I*Gwcm2, alphaprime, Parameters['pulse'])
+			P = ReflectionPower(time_array[t], I*Gwcm2, alpha, 1.5*Parameters['pulse'], A, R, peak_point, x, AGI)
 		else:
 			P = POWER(time_array[t], I*Gwcm2, A, alpha, Parameters['pulse'], peak_point)
 		

@@ -9,16 +9,16 @@ Gwcm2 = 1e+13 #Power Units
 
 #Material Constants !M! Note that these can and will change with ITO samples! 
 #These constants were calculated for a 407nm sample.
-N =  1.0071911873153335e+27			#Electron Density (per m^3) old file had 2.0585e+27
+N =  9.531746606764642e+26			#Electron Density (per m^3) old file had 2.0585e+27
 eps_inf = 3.45						#High Frequency Permittivity Limit
-me_min = (0.2581855200821601*m_e)	#Effective Mass at Bottom of Band (old 0.3964)
+me_min = (0.2623384490557345*m_e)	#Effective Mass at Bottom of Band (old 0.3964)
 eta = (0.4191/e) 					#Non-parabolic constant. Old file was C #changed for clarity
-wp0 = (2.6e15)		 				#Plasma Frequency at rest.
-gamma0 = 430e12						#Drude Scattering Rate at 300K (Assumed to be a constant)
+wp0 = (2.5325e15)		 				#Plasma Frequency at rest.
+gamma0 = 291e12						#Drude Scattering Rate at 300K (Assumed to be a constant)
 
 #These constants shouldn't change
 TD = 1000 							#Debye Temperature (K)
-Ef = 1*eV							#Fermi Level at 300K was 1.036327*eV #Now is the Fermi Energy
+Ef = 0.96*eV							#Fermi Level at 300K was 1.036327*eV #Now is the Fermi Energy
 vf = np.sqrt(2*Ef/me_min) 			#Fermi Velocity at 300K
 Tf = Ef/k							#Fermi Temperature (at 1eV, this is 11,600K)
 Lf = 1.577483e-14*vf 				#Mean Free Path (Relaxation rate at 300K * vf)
